@@ -8,62 +8,62 @@
 <style>
   :root {
     color-scheme: light;
-    --plane:        #eef1f6;
+    --plane:        #eef1ea;
     --surface:      #ffffff;
-    --surface-2:    #f7f8fa;
-    --ink:          #0f1720;
-    --ink-soft:     #5b6472;
-    --ink-muted:    #9aa2ad;
-    --hair:         #e7eaf0;
-    --header-bg:    #0f1720;
+    --surface-2:    #f6f8f2;
+    --ink:          #151d13;
+    --ink-soft:     #57604e;
+    --ink-muted:    #8b9382;
+    --hair:         #e3e8db;
+    --header-bg:    #16210f;
     --header-ink:   #ffffff;
-    --accent:       #2a78d6;
-    --accent-soft:  #bcd6f5;
-    --accent-wash:  #eaf2fc;
-    --bar-track:    #eef2f7;
-    --ring:         rgba(15,23,32,0.08);
-    --shadow:       0 1px 2px rgba(15,23,32,0.04), 0 16px 40px -20px rgba(15,23,32,0.25);
-    --danger:       #d03b3b;
+    --accent:       #4a7d34;
+    --accent-soft:  #c3d9ae;
+    --accent-wash:  #eef4e5;
+    --bar-track:    #eaefe1;
+    --ring:         rgba(21,29,19,0.08);
+    --shadow:       0 1px 2px rgba(21,29,19,0.04), 0 16px 40px -20px rgba(21,29,19,0.25);
+    --danger:       #b3402f;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --plane:        #0d0f12;
-      --surface:      #1a1d22;
-      --surface-2:    #20242a;
-      --ink:          #f5f6f8;
-      --ink-soft:     #b8bfc9;
-      --ink-muted:    #7d8592;
-      --hair:         #2b2f36;
-      --header-bg:    #05070a;
-      --header-ink:   #f5f6f8;
-      --accent:       #4c95e8;
-      --accent-soft:  #2c4b6e;
-      --accent-wash:  #182635;
-      --bar-track:    #262b32;
+      --plane:        #0d100b;
+      --surface:      #1a1e17;
+      --surface-2:    #20261b;
+      --ink:          #f4f6ef;
+      --ink-soft:     #b9c0af;
+      --ink-muted:    #838d76;
+      --hair:         #2b3026;
+      --header-bg:    #05080a;
+      --header-ink:   #f4f6ef;
+      --accent:       #6ba852;
+      --accent-soft:  #35452a;
+      --accent-wash:  #1a2415;
+      --bar-track:    #262c20;
       --ring:         rgba(255,255,255,0.08);
       --shadow:       0 1px 2px rgba(0,0,0,0.4), 0 16px 40px -20px rgba(0,0,0,0.7);
-      --danger:       #e8716f;
+      --danger:       #d47b6a;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --plane:        #0d0f12;
-    --surface:      #1a1d22;
-    --surface-2:    #20242a;
-    --ink:          #f5f6f8;
-    --ink-soft:     #b8bfc9;
-    --ink-muted:    #7d8592;
-    --hair:         #2b2f36;
-    --header-bg:    #05070a;
-    --header-ink:   #f5f6f8;
-    --accent:       #4c95e8;
-    --accent-soft:  #2c4b6e;
-    --accent-wash:  #182635;
-    --bar-track:    #262b32;
+    --plane:        #0d100b;
+    --surface:      #1a1e17;
+    --surface-2:    #20261b;
+    --ink:          #f4f6ef;
+    --ink-soft:     #b9c0af;
+    --ink-muted:    #838d76;
+    --hair:         #2b3026;
+    --header-bg:    #05080a;
+    --header-ink:   #f4f6ef;
+    --accent:       #6ba852;
+    --accent-soft:  #35452a;
+    --accent-wash:  #1a2415;
+    --bar-track:    #262c20;
     --ring:         rgba(255,255,255,0.08);
     --shadow:       0 1px 2px rgba(0,0,0,0.4), 0 16px 40px -20px rgba(0,0,0,0.7);
-    --danger:       #e8716f;
+    --danger:       #d47b6a;
   }
 
   * { box-sizing: border-box; }
@@ -86,11 +86,20 @@
     color: var(--ink-muted);
   }
   h1 { margin: 6px 0 0; font-size: clamp(26px, 4vw, 34px); font-weight: 700; letter-spacing: -0.01em; }
-  .subhead { margin: 10px 0 0; max-width: 68ch; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+  .subhead { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
 
-  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; box-shadow: var(--shadow); padding: 24px 26px; }
+  .title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .version-tag {
+    flex: none; margin-top: 6px; font-family: ui-monospace, monospace; font-size: 11px;
+    color: var(--ink-muted); background: var(--surface-2); border: 1px solid var(--hair);
+    border-radius: 999px; padding: 5px 12px; text-decoration: none; white-space: nowrap;
+    transition: color .12s ease, border-color .12s ease;
+  }
+  .version-tag:hover { color: var(--accent); border-color: var(--accent); }
 
-  .mode-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; box-shadow: var(--shadow); padding: 24px 26px; min-width: 0; }
+
+  .mode-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
   .mode-row .field-label {
     font-family: ui-monospace, monospace; font-size: 10.5px; font-weight: 600;
     letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted);
@@ -206,6 +215,10 @@
 
   @media (max-width: 640px) {
     .card { padding: 18px 16px; }
+    .mode-btn { padding: 8px 16px; }
+  }
+  @media (max-width: 520px) {
+    .mode-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   }
 </style>
 </head>
@@ -214,8 +227,13 @@
 <div class="page">
 
   <div>
-    <div class="eyebrow">ShopScape economics</div>
-    <h1>ShopScape Calc</h1>
+    <div class="title-row">
+      <div>
+        <div class="eyebrow">ShopScape economics</div>
+        <h1>ShopScape Calc</h1>
+      </div>
+      <a class="version-tag" id="versionTag" href="https://github.com/Tangle-Crew/ShopScapeCalc/commits/main" target="_blank" rel="noopener">checking version…</a>
+    </div>
     <p class="subhead">
       Choose whether you're buying or selling, then enter your item's numbers. Each transaction moves the
       price by the rate you set, and it resets back to the starting price on every world change — the chart
@@ -236,7 +254,7 @@
         <button class="mode-btn" type="button" data-goal="gold">Gold total</button>
       </div>
     </div>
-    <div class="mode-row" style="margin-top:-10px;">
+    <div class="mode-row" style="margin-bottom: 20px;">
       <span class="mode-hint" id="modeHint">Sell a fixed number of items — price falls as you go, and the total is your profit.</span>
     </div>
 
@@ -527,8 +545,25 @@
   var svg = document.getElementById("chartSvg");
   var tooltip = document.getElementById("tooltip");
   var wrap = document.getElementById("chartWrap");
-  var W = 920, H = 440, PAD_L = 66, PAD_R = 26, PAD_T = 24, PAD_B = 46;
-  var plotW = W - PAD_L - PAD_R, plotH = H - PAD_T - PAD_B;
+  var W, H, PAD_L, PAD_R, PAD_T, PAD_B, plotW, plotH, narrow, labelBoxW;
+
+  // Recompute the chart's logical viewBox from the container's actual on-screen width
+  // (rather than always rendering at a fixed 920x440 and letting the browser scale it down)
+  // so SVG text stays legible at mobile widths instead of shrinking along with everything else.
+  function updateDims() {
+    W = Math.max(280, Math.round(wrap.clientWidth || 920));
+    narrow = W < 560;
+    PAD_L = narrow ? 46 : 66;
+    PAD_R = narrow ? 12 : 26;
+    PAD_T = 20;
+    PAD_B = narrow ? 38 : 46;
+    H = narrow ? Math.round(W * 0.72) : Math.round(W * 0.478);
+    plotW = W - PAD_L - PAD_R;
+    plotH = H - PAD_T - PAD_B;
+    labelBoxW = narrow ? 168 : 196;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  }
+  updateDims();
 
   var currentX_MAX = 500, currentY_MAX = 1;
 
@@ -725,10 +760,11 @@
   }
 
   function renderChart(data, recBatch, idealVal) {
+    updateDims();
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var c = currentCopy();
 
-    var yTicks = niceTicks(currentY_MAX, 6);
+    var yTicks = niceTicks(currentY_MAX, narrow ? 4 : 6);
     yTicks.forEach(function (v) {
       var y = ys(v);
       svg.appendChild(el("line", { class: "grid-line", x1: PAD_L, x2: W - PAD_R, y1: y, y2: y }));
@@ -737,7 +773,7 @@
       svg.appendChild(t);
     });
 
-    var xTicks = niceTicks(currentX_MAX, 5);
+    var xTicks = niceTicks(currentX_MAX, narrow ? 4 : 5);
     xTicks.forEach(function (v) {
       var x = xs(v);
       var t = el("text", { class: "tick-label tnum", x: x, y: H - PAD_B + 20, "text-anchor": "middle" });
@@ -748,9 +784,14 @@
     var xt = el("text", { class: "axis-title", x: PAD_L + plotW / 2, y: H - 6, "text-anchor": "middle" });
     xt.textContent = "World hops needed";
     svg.appendChild(xt);
-    var yt = el("text", { class: "axis-title", x: -(PAD_T + plotH / 2), y: 16, "text-anchor": "middle", transform: "rotate(-90)" });
-    yt.textContent = c.chartYAxis;
-    svg.appendChild(yt);
+    // Skip the rotated y-axis title on narrow charts — at a small PAD_L there isn't room for
+    // both it and the tick value labels without them overlapping, and the chart title above
+    // the chart already names the y-axis.
+    if (!narrow) {
+      var yt = el("text", { class: "axis-title", x: -(PAD_T + plotH / 2), y: 16, "text-anchor": "middle", transform: "rotate(-90)" });
+      yt.textContent = c.chartYAxis;
+      svg.appendChild(yt);
+    }
 
     svg.appendChild(el("line", { class: "axis-line", x1: PAD_L, x2: W - PAD_R, y1: ys(0), y2: ys(0) }));
 
@@ -758,7 +799,7 @@
       var cy = ys(idealVal);
       svg.appendChild(el("line", { class: "ceiling-line", x1: PAD_L, x2: W - PAD_R, y1: cy, y2: cy }));
       var cl = el("text", { class: "ceiling-label", x: W - PAD_R, y: cy - 8, "text-anchor": "end" });
-      cl.textContent = "ideal (" + c.ideal + ") · " + fmtVal(idealVal) + " (batch = 1)";
+      cl.textContent = narrow ? "ideal · " + fmtVal(idealVal) : "ideal (" + c.ideal + ") · " + fmtVal(idealVal) + " (batch = 1)";
       svg.appendChild(cl);
     }
 
@@ -780,10 +821,27 @@
     var rec = data.reduce(function (best, d) { return Math.abs(d.b - recBatch) < Math.abs(best.b - recBatch) ? d : best; }, data[0]);
     var rx = xs(rec.hops), ry = ys(rec.val);
 
-    var labelX = Math.min(rx + 14, W - PAD_R - 190);
-    var labelY = Math.max(ry - 78, PAD_T + 30);
-    svg.appendChild(el("line", { class: "rec-leader", x1: rx, y1: ry - 10, x2: labelX - 6, y2: labelY + 26 }));
-    var bg = el("rect", { class: "rec-label-bg", x: labelX - 8, y: labelY - 16, width: 196, height: 40, rx: 6 });
+    var labelX = Math.max(PAD_L, Math.min(rx + 14, W - PAD_R - (labelBoxW - 6)));
+
+    // Try the box above the point (the usual placement) and below it, and pick whichever
+    // clears the ideal line's text row — that line can sit either above the curve (a ceiling,
+    // e.g. selling) or below it (a floor, e.g. buying), so neither placement is safe by default.
+    var aboveY = Math.max(ry - 78, PAD_T + 30);
+    var belowY = Math.min(ry + 34, H - PAD_B - 30);
+    var labelY = aboveY, placedBelow = false;
+    if (idealVal <= currentY_MAX && isFinite(idealVal)) {
+      var idealLineY = ys(idealVal);
+      var collides = function (y) { return (y + 24 > idealLineY - 20) && (y - 16 < idealLineY + 10); };
+      var aboveCollides = collides(aboveY), belowCollides = collides(belowY);
+      if (aboveCollides && !belowCollides) { labelY = belowY; placedBelow = true; }
+      else if (aboveCollides && belowCollides && Math.abs(belowY - idealLineY) > Math.abs(aboveY - idealLineY)) {
+        labelY = belowY; placedBelow = true;
+      }
+    }
+    var leaderY1 = placedBelow ? ry + 10 : ry - 10;
+    var leaderY2 = placedBelow ? labelY - 20 : labelY + 26;
+    svg.appendChild(el("line", { class: "rec-leader", x1: rx, y1: leaderY1, x2: labelX - 6, y2: leaderY2 }));
+    var bg = el("rect", { class: "rec-label-bg", x: labelX - 8, y: labelY - 16, width: labelBoxW, height: 40, rx: 6 });
     svg.appendChild(bg);
     var lt = el("text", { class: "rec-label-title", x: labelX, y: labelY });
     lt.textContent = "★ Suggested · " + fmtInt(rec.b) + "/world";
@@ -886,6 +944,81 @@
       compute();
     });
   });
+
+  var resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(compute, 120);
+  });
+
+  // Shows the latest release tag, pulled straight from GitHub rather than baked in at
+  // deploy time — this file has no build step, so there's no other point a version number
+  // would get stamped in.
+  (function () {
+    var versionTag = document.getElementById("versionTag");
+    if (!versionTag) return;
+
+    var REPO = "Tangle-Crew/ShopScapeCalc";
+    var CACHE_KEY = "shopscape-calc-version";
+    var CACHE_MS = 10 * 60 * 1000; // avoid re-hitting GitHub's unauthenticated rate limit
+                                    // (60 req/hr per IP) on every repeat visit from the clan
+
+    function applyVersion(v) {
+      var label = v.tag;
+      if (v.date) {
+        var d = new Date(v.date);
+        if (!isNaN(d)) label += " · " + d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+      versionTag.textContent = label;
+      versionTag.href = v.url;
+      if (v.msg) versionTag.title = v.msg;
+    }
+
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) {}
+
+    if (cached && cached.ts && (Date.now() - cached.ts) < CACHE_MS) {
+      applyVersion(cached);
+      return;
+    }
+
+    // Prefer a published GitHub Release (has a reliable "latest" and a publish date); fall
+    // back to the newest plain git tag if the repo doesn't use Releases.
+    fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+      .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("bad status"); return r.json(); })
+      .then(function (release) {
+        if (release && release.tag_name) {
+          return {
+            tag: release.tag_name,
+            date: release.published_at || null,
+            url: release.html_url,
+            msg: release.name || ""
+          };
+        }
+        return fetch("https://api.github.com/repos/" + REPO + "/tags")
+          .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
+          .then(function (tags) {
+            if (!tags || !tags.length) throw new Error("no tags");
+            var t = tags[0];
+            return {
+              tag: t.name,
+              date: null,
+              url: "https://github.com/" + REPO + "/releases/tag/" + encodeURIComponent(t.name),
+              msg: ""
+            };
+          });
+      })
+      .then(function (v) {
+        if (!v || !v.tag) throw new Error("no tag");
+        v.ts = Date.now();
+        applyVersion(v);
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(v)); } catch (e) {}
+      })
+      .catch(function () {
+        if (cached && cached.tag) applyVersion(cached);
+        else versionTag.textContent = "no version tagged";
+      });
+  })();
 
   applyModeCopy();
   compute();
