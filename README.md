@@ -48,3 +48,9 @@ It's a single static `index.html` — no build step, no backend, no dependencies
 - Inline SVG — chart rendering
 - GitHub Pages — hosting
 - Claude by Anthropic — development assistance
+
+---
+
+## License
+
+[MIT](LICENSE)
