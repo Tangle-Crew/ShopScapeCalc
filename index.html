@@ -336,7 +336,7 @@
       <table>
         <thead>
           <tr>
-            <th id="thBatch">Batch / world</th>
+            <th id="thBatch">Batch</th>
             <th>Hops</th>
             <th id="thTotal">Total profit</th>
             <th>Avg price</th>
@@ -388,7 +388,7 @@
         valueLabel: "Total profit", valueIsGold: true, rising: true,
         lastLabel: "Price of last item",
         chartTitle: "Total profit vs. hops required", chartYAxis: "Total profit",
-        thBatch: "Batch / world", thTotal: "Total profit", thLast: "Last item",
+        thBatch: "Batch", thTotal: "Total profit", thLast: "Last item",
         chartAria: "Line chart of total profit versus number of world hops required.",
         footnote: "Dashed line = ideal case (batch size of 1, resetting after every sale). Star = suggested sweet spot, picked automatically as the point of sharpest diminishing returns.",
         footer: "Model: price starts at the value above and multiplies by (1 − drop%) after every individual item sold within a world, resetting back to the starting price on each world change. “Hops” counts world changes only (not the first world you start in). “Last item” is the price of the final unit sold in that batch, right before the reset. The best case is the unreachable ideal of never letting the price move at all. Open this file directly in any browser — nothing is sent anywhere, all of the math runs locally.",
@@ -402,7 +402,7 @@
         valueLabel: "Items needed", valueIsGold: false, rising: false,
         lastLabel: "Price of last item",
         chartTitle: "Items needed vs. hops required", chartYAxis: "Items needed",
-        thBatch: "Batch / world", thTotal: "Items needed", thLast: "Last item",
+        thBatch: "Batch", thTotal: "Items needed", thLast: "Last item",
         chartAria: "Line chart of items needed to sell versus number of world hops required.",
         footnote: "Dashed line = ideal case (batch size of 1, resetting after every sale — the fewest items possible). Star = suggested sweet spot, picked automatically as the point of sharpest diminishing returns.",
         footer: "Model: price starts at the value above and multiplies by (1 − drop%) after every individual item sold within a world, resetting back to the starting price on each world change. “Hops” counts world changes only (not the first world you start in). “Items needed” is however many sales it takes to reach your gold target at that batch size. “Last item” is the price of the final unit sold in that batch, right before the reset. Open this file directly in any browser — nothing is sent anywhere, all of the math runs locally.",
@@ -418,7 +418,7 @@
         valueLabel: "Total cost", valueIsGold: true, rising: false,
         lastLabel: "Price of last item",
         chartTitle: "Total cost vs. hops required", chartYAxis: "Total cost",
-        thBatch: "Batch / world", thTotal: "Total cost", thLast: "Last item",
+        thBatch: "Batch", thTotal: "Total cost", thLast: "Last item",
         chartAria: "Line chart of total cost versus number of world hops required.",
         footnote: "Dashed line = ideal case (batch size of 1, resetting after every purchase). Star = suggested sweet spot, picked automatically as the point of sharpest diminishing returns.",
         footer: "Model: price starts at the value above and multiplies by (1 + increase%) after every individual item bought within a world, resetting back to the starting price on each world change. “Hops” counts world changes only (not the first world you start in). “Last item” is the price of the final unit bought in that batch, right before the reset. The best case is the unreachable ideal of never letting the price move at all. Open this file directly in any browser — nothing is sent anywhere, all of the math runs locally.",
@@ -432,7 +432,7 @@
         valueLabel: "Items acquired", valueIsGold: false, rising: true,
         lastLabel: "Price of last item",
         chartTitle: "Items acquired vs. hops required", chartYAxis: "Items acquired",
-        thBatch: "Batch / world", thTotal: "Items acquired", thLast: "Last item",
+        thBatch: "Batch", thTotal: "Items acquired", thLast: "Last item",
         chartAria: "Line chart of items acquired versus number of world hops required.",
         footnote: "Dashed line = ideal case (batch size of 1, resetting after every purchase — the most items possible). Star = suggested sweet spot, picked automatically as the point of sharpest diminishing returns.",
         footer: "Model: price starts at the value above and multiplies by (1 + increase%) after every individual item bought within a world, resetting back to the starting price on each world change. “Hops” counts world changes only (not the first world you start in). “Items acquired” is however many purchases your gold budget covers at that batch size. “Last item” is the price of the final unit bought in that batch, right before the reset. Open this file directly in any browser — nothing is sent anywhere, all of the math runs locally.",
@@ -889,7 +889,7 @@
       hoverDot.setAttribute("opacity", 1);
 
       tooltip.innerHTML =
-        '<div class="row"><span class="k">Batch/world</span><span class="tnum">' + fmtInt(d.b) + '</span></div>' +
+        '<div class="row"><span class="k">Batch</span><span class="tnum">' + fmtInt(d.b) + '</span></div>' +
         '<div class="row"><span class="k">Hops needed</span><span class="tnum">' + fmtInt(d.hops) + '</span></div>' +
         '<div class="row"><span class="k">' + c.valueLabel + '</span><span class="tnum">' + fmtVal(d.val) + '</span></div>' +
         '<div class="row"><span class="k">Last item</span><span class="tnum">' + fmtPrice(d.lastPrice) + 'g</span></div>' +
