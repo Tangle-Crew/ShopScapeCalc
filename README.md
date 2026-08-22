@@ -1,17 +1,50 @@
 # ShopScape Calc
 
-A calculator for OSRS-style shop economics: given a starting price and a per-item
-drop/increase rate, it works out the best batch size to sell or buy per world so
-you can hit a target (an item count or a gold total) with the fewest world hops
-and the least price erosion.
+A shop-price calculator for **Tangle Crew** in [Old School RuneScape](https://oldschool.runescape.com/).
 
-Live at **[shopscapecalc.tanglecrew.group](https://shopscapecalc.tanglecrew.group)**.
-It's a single static `index.html` served via GitHub Pages — no build step, no
-backend, all the math runs locally in your browser.
+> **Built with the assistance of Claude by Anthropic — an AI coding assistant.**
 
 ## Tangle Crew
 
-Built for and used by **Tangle Crew**, an Old School RuneScape clan. See
-[Pdiddy973/TangleCrew](https://github.com/Pdiddy973/TangleCrew) for the clan's
-Discord bot and other tools, or join the clan at
-[discord.gg/tanglecrew](https://discord.gg/tanglecrew).
+**Discord:** https://discord.gg/tanglecrew
+
+**Wise Old Man:** wiseoldman.net/groups/12447
+
+**OSRS Clan Finder:** https://osrsclanfinder.com/clans/tangle-crew
+
+**OSRS Clans:** https://osrsclans.cc/clans/tanglecrew
+
+---
+
+## What it does
+
+Shop prices move by a fixed percentage with every item bought or sold, then reset back to the starting price on a world hop. ShopScape Calc models that curve and works out the batch size that gets closest to the ideal price for the fewest hops.
+
+### 🔄 Sell or Buy
+
+Toggle between selling (price drops per item) and buying (price rises per item).
+
+### 🎯 Amount or Gold total
+
+Solve for the profit or cost of a fixed item count, or for how many items it takes to hit a gold target.
+
+### 📈 Suggested sweet spot
+
+Automatically picks the batch size at the point of sharpest diminishing returns, plotted on an interactive chart alongside a full batch-size breakdown table.
+
+---
+
+## Usage
+
+Live at **[shopscapecalc.tanglecrew.group](https://shopscapecalc.tanglecrew.group)**.
+
+It's a single static `index.html` — no build step, no backend, no dependencies. Everything runs client-side, so you can also just download the file and open it directly in a browser.
+
+---
+
+## Built With
+
+- Vanilla HTML/CSS/JS
+- Inline SVG — chart rendering
+- GitHub Pages — hosting
+- Claude by Anthropic — development assistance
