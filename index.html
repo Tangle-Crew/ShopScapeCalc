@@ -96,6 +96,36 @@
   }
   :root[data-page="onyx"] h1 { text-shadow: 0 0 24px rgba(255,106,31,0.35); }
 
+  /* Nardah theme — applied whenever the Unf Potion Calc tab is active, regardless of the
+     visitor's light/dark preference. A desert-at-dusk palette: dark sandstone and terracotta,
+     rather than the bright noon-desert look this started as. */
+  :root[data-page="unf"] {
+    color-scheme: dark;
+    --plane:        #241708;
+    --surface:      #33220f;
+    --surface-2:    #402c14;
+    --ink:          #f5e5c4;
+    --ink-soft:     #d3b384;
+    --ink-muted:    #9c7c53;
+    --hair:         #4f3a1c;
+    --header-bg:    #180f05;
+    --header-ink:   #ffe4b0;
+    --accent:       #e08a34;
+    --accent-soft:  #7a5225;
+    --accent-wash:  #3a2712;
+    --bar-track:    #40301a;
+    --ring:         rgba(224,138,52,0.16);
+    --shadow:       0 1px 2px rgba(0,0,0,0.4), 0 16px 40px -20px rgba(0,0,0,0.75);
+    --danger:       #d9614a;
+  }
+  :root[data-page="unf"] body {
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(224,138,52,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 420px at 0% 15%, rgba(160,100,40,0.18), transparent 55%),
+      var(--plane);
+  }
+  :root[data-page="unf"] h1 { text-shadow: 0 0 20px rgba(224,138,52,0.3); }
+
   * { box-sizing: border-box; }
   html, body { background: var(--plane); }
   body {
@@ -267,6 +297,7 @@
   <div class="mode-toggle page-tabs" id="pageTabs">
     <button class="mode-btn active" type="button" data-page="general">General Calc</button>
     <button class="mode-btn" type="button" data-page="onyx">Onyx Calc</button>
+    <button class="mode-btn" type="button" data-page="unf">Unf Potion Calc</button>
   </div>
 
   <div class="page-section" id="section-general">
@@ -520,6 +551,96 @@
     <a href="https://oldschool.runescape.wiki/w/TzHaar-Mej-Roh%27s_Rune_Store" target="_blank" rel="noopener">Rune store</a>
     &middot;
     <a href="https://oldschool.runescape.wiki/w/TzHaar-Hur-Lek%27s_Ore_and_Gem_Store" target="_blank" rel="noopener">Onyx store</a>
+    &middot;
+    <a href="https://github.com/Tangle-Crew/ShopScapeCalc" target="_blank" rel="noopener">GitHub</a>
+    &middot;
+    <a href="https://github.com/Tangle-Crew/ShopScapeCalc/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+  </footer>
+
+  </div>
+
+  <div class="page-section" id="section-unf" hidden>
+
+  <div>
+    <div class="title-row">
+      <div>
+        <div class="eyebrow">Nardah services</div>
+        <h1>Unf Potion Calc</h1>
+      </div>
+      <a class="version-tag" id="versionTagUnf" href="https://github.com/Tangle-Crew/ShopScapeCalc/commits/main" target="_blank" rel="noopener">checking version…</a>
+    </div>
+    <p class="subhead">
+      See what Zahur charges to clean herbs and turn them into unfinished potions, and what Wesley charges to crush items.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="mode-row">
+      <span class="field-label">Herb amount</span>
+      <div class="mode-toggle" id="herbModeToggle">
+        <button class="mode-btn active" type="button" data-herbmode="combined">Combined</button>
+        <button class="mode-btn" type="button" data-herbmode="separate">Separate</button>
+      </div>
+    </div>
+    <div class="mode-row" style="margin-bottom: 20px;">
+      <span class="mode-hint" id="herbModeHint">One amount is both cleaned and turned into unf potions.</span>
+    </div>
+
+    <div class="inputs-grid">
+      <div class="field" id="f-herbs">
+        <label for="in-herbs">Herbs to clean &amp; pot</label>
+        <div class="input-row"><input id="in-herbs" type="text" inputmode="numeric" autocomplete="off" value="1,000"><span class="unit">herbs</span></div>
+        <div class="err-msg">Must be a whole number ≥ 0</div>
+      </div>
+      <div class="field" id="f-herbs-clean" hidden>
+        <label for="in-herbs-clean">Herbs to clean</label>
+        <div class="input-row"><input id="in-herbs-clean" type="text" inputmode="numeric" autocomplete="off" value="1,000"><span class="unit">herbs</span></div>
+        <div class="err-msg">Must be a whole number ≥ 0</div>
+      </div>
+      <div class="field" id="f-herbs-pot" hidden>
+        <label for="in-herbs-pot">Herbs to pot</label>
+        <div class="input-row"><input id="in-herbs-pot" type="text" inputmode="numeric" autocomplete="off" value="1,000"><span class="unit">herbs</span></div>
+        <div class="err-msg">Must be a whole number ≥ 0</div>
+      </div>
+      <div class="field" id="f-crush">
+        <label for="in-crush">Items to crush</label>
+        <div class="input-row"><input id="in-crush" type="text" inputmode="numeric" autocomplete="off" value="1,000"><span class="unit">items</span></div>
+        <div class="err-msg">Must be a whole number ≥ 0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="summary-row">
+      <div class="stat">
+        <div class="k">Cleaning (Zahur)</div>
+        <div class="v tnum" id="unfStatClean">0g</div>
+      </div>
+      <div class="stat">
+        <div class="k">Unf potions (Zahur)</div>
+        <div class="v tnum" id="unfStatPot">0g</div>
+      </div>
+      <div class="stat">
+        <div class="k">Crushing (Wesley)</div>
+        <div class="v tnum" id="unfStatCrush">0g</div>
+      </div>
+      <div class="stat accent">
+        <div class="k">Total cost</div>
+        <div class="v tnum" id="unfStatTotal">0g</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span id="unfFooterText">
+      Zahur charges 200gp to clean a grimy herb and 200gp to turn a clean herb into an unfinished potion; Wesley
+      charges 50gp to crush an item. Both are flat per-item fees with no stock or price movement — nothing here
+      leaves your browser.
+    </span>
+    <br><br>
+    <a href="https://oldschool.runescape.wiki/w/Zahur" target="_blank" rel="noopener">Zahur</a>
+    &middot;
+    <a href="https://oldschool.runescape.wiki/w/Wesley" target="_blank" rel="noopener">Wesley</a>
     &middot;
     <a href="https://github.com/Tangle-Crew/ShopScapeCalc" target="_blank" rel="noopener">GitHub</a>
     &middot;
@@ -1353,13 +1474,88 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
   computeOnyx();
 })();
 
-// Top-level tab switcher — swaps between the General Calc and Onyx Calc sections and flips
-// the page into (or out of) the TzHaar lava theme via the [data-page] attribute on <html>.
+// Unf Potion Calc — Zahur's flat per-herb cleaning/potting fee and Wesley's flat per-item
+// crushing fee, both in Nardah. No stock or price movement, so it's just multiplication.
+(function () {
+  var ZAHUR_CLEAN_COST = 200;
+  var ZAHUR_POT_COST = 200;
+  var WESLEY_CRUSH_COST = 50;
+
+  var herbsInp = document.getElementById("in-herbs");
+  var herbsCleanInp = document.getElementById("in-herbs-clean");
+  var herbsPotInp = document.getElementById("in-herbs-pot");
+  var crushInp = document.getElementById("in-crush");
+
+  var herbMode = "combined";
+  var herbModeToggle = document.getElementById("herbModeToggle");
+  var herbModeHint = document.getElementById("herbModeHint");
+  var fHerbs = document.getElementById("f-herbs");
+  var fHerbsClean = document.getElementById("f-herbs-clean");
+  var fHerbsPot = document.getElementById("f-herbs-pot");
+
+  herbModeToggle.addEventListener("click", function (e) {
+    var btn = e.target.closest(".mode-btn");
+    if (!btn) return;
+    herbMode = btn.getAttribute("data-herbmode");
+    Array.prototype.forEach.call(herbModeToggle.querySelectorAll(".mode-btn"), function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+    var combined = herbMode === "combined";
+    fHerbs.hidden = !combined;
+    fHerbsClean.hidden = combined;
+    fHerbsPot.hidden = combined;
+    herbModeHint.textContent = combined
+      ? "One amount is both cleaned and turned into unf potions."
+      : "Set how many herbs get cleaned and how many get potted separately.";
+    computeUnf();
+  });
+
+  function fmtGoldFlat(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") + "g" : "—"; }
+
+  function readQty(inp) {
+    var raw = parseInt(stripCommas(inp.value), 10);
+    return isFinite(raw) && raw > 0 ? Math.round(raw) : 0;
+  }
+
+  function computeUnf() {
+    var herbsClean, herbsPot;
+    if (herbMode === "combined") {
+      herbsClean = herbsPot = readQty(herbsInp);
+    } else {
+      herbsClean = readQty(herbsCleanInp);
+      herbsPot = readQty(herbsPotInp);
+    }
+    var crush = readQty(crushInp);
+
+    var cleanCost = herbsClean * ZAHUR_CLEAN_COST;
+    var potCost = herbsPot * ZAHUR_POT_COST;
+    var crushCost = crush * WESLEY_CRUSH_COST;
+    var total = cleanCost + potCost + crushCost;
+
+    document.getElementById("unfStatClean").textContent = fmtGoldFlat(cleanCost);
+    document.getElementById("unfStatPot").textContent = fmtGoldFlat(potCost);
+    document.getElementById("unfStatCrush").textContent = fmtGoldFlat(crushCost);
+    document.getElementById("unfStatTotal").textContent = fmtGoldFlat(total);
+  }
+
+  [herbsInp, herbsCleanInp, herbsPotInp, crushInp].forEach(function (inp) {
+    inp.addEventListener("input", function () {
+      formatCommas(inp);
+      computeUnf();
+    });
+  });
+
+  computeUnf();
+})();
+
+// Top-level tab switcher — swaps between the calculator sections and flips the page into (or
+// out of) the TzHaar lava theme via the [data-page] attribute on <html>.
 (function () {
   var pageTabs = document.getElementById("pageTabs");
   var sections = {
     general: document.getElementById("section-general"),
-    onyx: document.getElementById("section-onyx")
+    onyx: document.getElementById("section-onyx"),
+    unf: document.getElementById("section-unf")
   };
 
   pageTabs.addEventListener("click", function (e) {

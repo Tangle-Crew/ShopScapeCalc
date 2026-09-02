@@ -18,7 +18,7 @@ A shop-price calculator for **Tangle Crew** in [Old School RuneScape](https://ol
 
 ## What it does
 
-ShopScape Calc is two calculators in one page, switched with a tab at the top.
+ShopScape Calc is three calculators in one page, switched with a tab at the top.
 
 ### General Calc
 
@@ -36,6 +36,14 @@ Sell Chaos and Death runes to [TzHaar-Mej-Roh's Rune Store](https://oldschool.ru
 - **🧤 Karamja gloves** — toggle the better rune sell-back rate and onyx price the gloves (tier 1+) give you.
 - **💰 Starting Tokkul** — add Tokkul you already have on top of whatever the runes earn.
 - **🔶 Uncut onyx affordable** — shown to the nearest tenth rather than floored, so you can see how close you are.
+
+### Unf Potion Calc
+
+What [Zahur](https://oldschool.runescape.wiki/w/Zahur) and [Wesley](https://oldschool.runescape.wiki/w/Wesley) charge in Nardah — flat per-item fees with no stock or price movement to model, so it's just multiplication.
+
+- **🧪 Clean & pot herbs** — Zahur charges 200gp to clean a grimy herb and another 200gp to turn a clean herb into an unfinished potion.
+- **🔨 Crush items** — Wesley charges a flat 50gp to crush anything that'd normally need a pestle and mortar.
+- **↔️ Combined or Separate** — drive cleaning and potting off one shared amount, or split them into independent amounts for when you're only potting some of what you clean.
 
 ---
 
