@@ -66,6 +66,36 @@
     --danger:       #d47b6a;
   }
 
+  /* TzHaar / Mor Ul Rek theme — applied to the whole page whenever the Onyx Calc tab is
+     active, regardless of the visitor's light/dark preference. The obsidian-and-lava look is
+     part of that page's identity rather than something that should flip with system theme. */
+  :root[data-page="onyx"] {
+    color-scheme: dark;
+    --plane:        #0b0605;
+    --surface:      #1a0e0a;
+    --surface-2:    #23120c;
+    --ink:          #f5e6d8;
+    --ink-soft:     #cba690;
+    --ink-muted:    #8f6a58;
+    --hair:         #3d2015;
+    --header-bg:    #0a0403;
+    --header-ink:   #ffd7a8;
+    --accent:       #ff6a1f;
+    --accent-soft:  #7a3316;
+    --accent-wash:  #2c1208;
+    --bar-track:    #2a140c;
+    --ring:         rgba(255,106,31,0.16);
+    --shadow:       0 1px 2px rgba(0,0,0,0.5), 0 16px 40px -20px rgba(0,0,0,0.85);
+    --danger:       #ff5a4d;
+  }
+  :root[data-page="onyx"] body {
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,106,31,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 420px at 100% 10%, rgba(255,70,20,0.10), transparent 55%),
+      var(--plane);
+  }
+  :root[data-page="onyx"] h1 { text-shadow: 0 0 24px rgba(255,106,31,0.35); }
+
   * { box-sizing: border-box; }
   html, body { background: var(--plane); }
   body {
@@ -116,6 +146,10 @@
   .mode-btn.active { background: var(--accent); color: #ffffff; }
   .mode-btn:not(.active):hover { color: var(--ink); }
   .mode-hint { font-size: 12.5px; color: var(--ink-muted); }
+
+  .page-tabs { padding: 4px; }
+  .page-tabs .mode-btn { padding: 10px 26px; font-size: 14px; }
+  .page-section[hidden] { display: none; }
 
   .inputs-grid {
     display: grid;
@@ -228,6 +262,13 @@
 <body>
 
 <div class="page">
+
+  <div class="mode-toggle page-tabs" id="pageTabs">
+    <button class="mode-btn active" type="button" data-page="general">General Calc</button>
+    <button class="mode-btn" type="button" data-page="onyx">Onyx Calc</button>
+  </div>
+
+  <div class="page-section" id="section-general">
 
   <div>
     <div class="title-row">
@@ -364,9 +405,164 @@
     <a href="https://github.com/Tangle-Crew/ShopScapeCalc/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
   </footer>
 
+  </div>
+
+  <div class="page-section" id="section-onyx" hidden>
+
+  <div>
+    <div class="title-row">
+      <div>
+        <div class="eyebrow">Mor Ul Rek trading</div>
+        <h1>Onyx Calc</h1>
+      </div>
+      <a class="version-tag" id="versionTagOnyx" href="https://github.com/Tangle-Crew/ShopScapeCalc/commits/main" target="_blank" rel="noopener">checking version…</a>
+    </div>
+    <p class="subhead">
+      Sell Chaos and Death runes for Tokkul, then see how many uncut onyx that buys.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="mode-row">
+      <span class="field-label">Karamja gloves</span>
+      <div class="mode-toggle" id="glovesToggle">
+        <button class="mode-btn active" type="button" data-gloves="off">Not worn</button>
+        <button class="mode-btn" type="button" data-gloves="on">Worn (tier 1+)</button>
+      </div>
+    </div>
+    <div class="mode-row" style="margin-bottom: 20px;">
+      <span class="mode-hint" id="glovesHint">Base rate: runes sell to the shop starting at 15% of their value.</span>
+    </div>
+
+    <div class="field" id="f-starting-tokkul" style="max-width: 240px; margin-bottom: 20px;">
+      <label for="in-starting-tokkul">Starting Tokkul</label>
+      <div class="input-row"><input id="in-starting-tokkul" type="text" inputmode="numeric" autocomplete="off" value="0"><span class="unit">tk</span></div>
+    </div>
+
+    <div class="inputs-grid" id="runeInputs"></div>
+  </div>
+
+  <div class="card">
+    <div class="summary-row">
+      <div class="stat">
+        <div class="k">Total runes sold</div>
+        <div class="v tnum" id="onyxStatCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="k">Tokkul from runes</div>
+        <div class="v tnum" id="onyxStatTotal">0 tk</div>
+      </div>
+      <div class="stat">
+        <div class="k">Avg Tokkul / rune</div>
+        <div class="v tnum" id="onyxStatAvg">—</div>
+      </div>
+      <div class="stat">
+        <div class="k">Extra with gloves</div>
+        <div class="v tnum" id="onyxStatGloves">+0 tk</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chart-title" style="margin-bottom:4px;">Uncut onyx</div>
+    <p class="mode-hint" style="margin-bottom:16px;">Only 1 in stock at a time, so every purchase lands at the same base price.</p>
+    <div class="summary-row">
+      <div class="stat">
+        <div class="k">Total Tokkul</div>
+        <div class="v tnum" id="onyxStatGrandTotal">0 tk</div>
+      </div>
+      <div class="stat">
+        <div class="k">Price per onyx</div>
+        <div class="v tnum" id="onyxStatOnyxPrice">300,000 tk</div>
+      </div>
+      <div class="stat accent">
+        <div class="k">Uncut onyx affordable</div>
+        <div class="v tnum" id="onyxStatOnyxCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="k">Tokkul left over</div>
+        <div class="v tnum" id="onyxStatLeftover">0 tk</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chart-title" style="margin-bottom:12px;">Rune-by-rune breakdown</div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left;">Rune</th>
+            <th>Base value</th>
+            <th>Qty sold</th>
+            <th>Tokkul earned</th>
+            <th>Avg / rune</th>
+            <th>Last rune</th>
+          </tr>
+        </thead>
+        <tbody id="onyxTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <span id="onyxFooterText">
+      Rune price starts at 15% of value (35% with gloves) and drops 2% per sale, floored at 10%. Onyx costs
+      300,000 Tokkul, or 260,000 with gloves. Nothing here leaves your browser.
+    </span>
+    <br><br>
+    <a href="https://oldschool.runescape.wiki/w/TzHaar-Mej-Roh%27s_Rune_Store" target="_blank" rel="noopener">Rune store</a>
+    &middot;
+    <a href="https://oldschool.runescape.wiki/w/TzHaar-Hur-Lek%27s_Ore_and_Gem_Store" target="_blank" rel="noopener">Onyx store</a>
+    &middot;
+    <a href="https://github.com/Tangle-Crew/ShopScapeCalc" target="_blank" rel="noopener">GitHub</a>
+    &middot;
+    <a href="https://github.com/Tangle-Crew/ShopScapeCalc/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+  </footer>
+
+  </div>
+
 </div>
 
 <script>
+// Shared helpers used by both the General Calc and Onyx Calc sections below.
+
+// Numeric inputs are type="text" (so commas can live in the value) — always strip commas
+// before parsing.
+function stripCommas(str) { return String(str).replace(/,/g, ""); }
+function numVal(inputEl) { return parseFloat(stripCommas(inputEl.value)); }
+
+// Live thousands-separator formatting: reformats the field's value with commas in the
+// integer part on every keystroke, while keeping the caret sitting after the same digit
+// the user just typed (counted by digit position, not raw character index, since commas
+// shift around as digits are added/removed).
+function formatCommas(inputEl) {
+  var raw = inputEl.value;
+  var selStart = inputEl.selectionStart;
+  if (typeof selStart !== "number") selStart = raw.length;
+  var digitsBefore = (raw.slice(0, selStart).match(/[0-9]/g) || []).length;
+
+  var cleaned = raw.replace(/,/g, "");
+  var parts = cleaned.split(".");
+  var intPart = parts[0].replace(/[^0-9]/g, "");
+  var decPart = parts.length > 1 ? "." + parts[1].replace(/[^0-9]/g, "") : "";
+  var formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var newVal = formattedInt + decPart;
+
+  if (newVal === raw) return;
+  inputEl.value = newVal;
+
+  var pos = 0, digitCount = 0;
+  while (pos < newVal.length && digitCount < digitsBefore) {
+    if (/[0-9]/.test(newVal[pos])) digitCount++;
+    pos++;
+  }
+  inputEl.setSelectionRange(pos, pos);
+}
+
+function fmtInt(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") : "—"; }
+function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"; }
+
 (function () {
   var priceInp = document.getElementById("in-price");
   var decayInp = document.getElementById("in-decay");
@@ -503,43 +699,8 @@
     return condition;
   }
 
-  // Numeric inputs are type="text" (so commas can live in the value) — always strip commas
-  // before parsing.
-  function stripCommas(str) { return String(str).replace(/,/g, ""); }
-  function numVal(inputEl) { return parseFloat(stripCommas(inputEl.value)); }
-
-  // Live thousands-separator formatting: reformats the field's value with commas in the
-  // integer part on every keystroke, while keeping the caret sitting after the same digit
-  // the user just typed (counted by digit position, not raw character index, since commas
-  // shift around as digits are added/removed).
-  function formatCommas(inputEl) {
-    var raw = inputEl.value;
-    var selStart = inputEl.selectionStart;
-    if (typeof selStart !== "number") selStart = raw.length;
-    var digitsBefore = (raw.slice(0, selStart).match(/[0-9]/g) || []).length;
-
-    var cleaned = raw.replace(/,/g, "");
-    var parts = cleaned.split(".");
-    var intPart = parts[0].replace(/[^0-9]/g, "");
-    var decPart = parts.length > 1 ? "." + parts[1].replace(/[^0-9]/g, "") : "";
-    var formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    var newVal = formattedInt + decPart;
-
-    if (newVal === raw) return;
-    inputEl.value = newVal;
-
-    var pos = 0, digitCount = 0;
-    while (pos < newVal.length && digitCount < digitsBefore) {
-      if (/[0-9]/.test(newVal[pos])) digitCount++;
-      pos++;
-    }
-    inputEl.setSelectionRange(pos, pos);
-  }
-
-  function fmtInt(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") : "—"; }
   function fmtGold(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") + "g" : "too large"; }
   function fmtItems(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") + " items" : "too many"; }
-  function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"; }
   // dispatches to gold- or item-count formatting depending on which of the four mode/goal
   // combinations is active — "val" means gold under an amount-goal, items under a gold-goal.
   function fmtVal(v) { return currentCopy().valueIsGold ? fmtGold(v) : fmtItems(v); }
@@ -960,77 +1121,243 @@
     resizeTimer = setTimeout(compute, 120);
   });
 
-  // Shows the latest release tag, pulled straight from GitHub rather than baked in at
-  // deploy time — this file has no build step, so there's no other point a version number
-  // would get stamped in.
-  (function () {
-    var versionTag = document.getElementById("versionTag");
-    if (!versionTag) return;
-
-    var REPO = "Tangle-Crew/ShopScapeCalc";
-    var CACHE_KEY = "shopscape-calc-version";
-    var CACHE_MS = 10 * 60 * 1000; // avoid re-hitting GitHub's unauthenticated rate limit
-                                    // (60 req/hr per IP) on every repeat visit from the clan
-
-    function applyVersion(v) {
-      var label = v.tag;
-      if (v.date) {
-        var d = new Date(v.date);
-        if (!isNaN(d)) label += " · " + d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      }
-      versionTag.textContent = label;
-      versionTag.href = v.url;
-      if (v.msg) versionTag.title = v.msg;
-    }
-
-    var cached = null;
-    try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) {}
-
-    if (cached && cached.ts && (Date.now() - cached.ts) < CACHE_MS) {
-      applyVersion(cached);
-      return;
-    }
-
-    // Prefer a published GitHub Release (has a reliable "latest" and a publish date); fall
-    // back to the newest plain git tag if the repo doesn't use Releases.
-    fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
-      .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("bad status"); return r.json(); })
-      .then(function (release) {
-        if (release && release.tag_name) {
-          return {
-            tag: release.tag_name,
-            date: release.published_at || null,
-            url: release.html_url,
-            msg: release.name || ""
-          };
-        }
-        return fetch("https://api.github.com/repos/" + REPO + "/tags")
-          .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
-          .then(function (tags) {
-            if (!tags || !tags.length) throw new Error("no tags");
-            var t = tags[0];
-            return {
-              tag: t.name,
-              date: null,
-              url: "https://github.com/" + REPO + "/releases/tag/" + encodeURIComponent(t.name),
-              msg: ""
-            };
-          });
-      })
-      .then(function (v) {
-        if (!v || !v.tag) throw new Error("no tag");
-        v.ts = Date.now();
-        applyVersion(v);
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify(v)); } catch (e) {}
-      })
-      .catch(function () {
-        if (cached && cached.tag) applyVersion(cached);
-        else versionTag.textContent = "no version tagged";
-      });
-  })();
-
   applyModeCopy();
   compute();
+
+  // Exposed so the page-tab switcher can force a recompute when this section becomes visible
+  // again — its chart sizes itself off the container's clientWidth, which is 0 while [hidden].
+  window.recomputeGeneral = compute;
+})();
+
+// Shows the latest release tag, pulled straight from GitHub rather than baked in at deploy
+// time — this file has no build step, so there's no other point a version number would get
+// stamped in. Both tabs have their own version-tag anchor, so every ".version-tag" element
+// gets the same label.
+(function () {
+  var versionTags = document.querySelectorAll(".version-tag");
+  if (!versionTags.length) return;
+
+  var REPO = "Tangle-Crew/ShopScapeCalc";
+  var CACHE_KEY = "shopscape-calc-version";
+  var CACHE_MS = 10 * 60 * 1000; // avoid re-hitting GitHub's unauthenticated rate limit
+                                  // (60 req/hr per IP) on every repeat visit from the clan
+
+  function applyVersion(v) {
+    var label = v.tag;
+    if (v.date) {
+      var d = new Date(v.date);
+      if (!isNaN(d)) label += " · " + d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+    Array.prototype.forEach.call(versionTags, function (tag) {
+      tag.textContent = label;
+      tag.href = v.url;
+      if (v.msg) tag.title = v.msg;
+    });
+  }
+
+  var cached = null;
+  try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) {}
+
+  if (cached && cached.ts && (Date.now() - cached.ts) < CACHE_MS) {
+    applyVersion(cached);
+    return;
+  }
+
+  // Prefer a published GitHub Release (has a reliable "latest" and a publish date); fall
+  // back to the newest plain git tag if the repo doesn't use Releases.
+  fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+    .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("bad status"); return r.json(); })
+    .then(function (release) {
+      if (release && release.tag_name) {
+        return {
+          tag: release.tag_name,
+          date: release.published_at || null,
+          url: release.html_url,
+          msg: release.name || ""
+        };
+      }
+      return fetch("https://api.github.com/repos/" + REPO + "/tags")
+        .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
+        .then(function (tags) {
+          if (!tags || !tags.length) throw new Error("no tags");
+          var t = tags[0];
+          return {
+            tag: t.name,
+            date: null,
+            url: "https://github.com/" + REPO + "/releases/tag/" + encodeURIComponent(t.name),
+            msg: ""
+          };
+        });
+    })
+    .then(function (v) {
+      if (!v || !v.tag) throw new Error("no tag");
+      v.ts = Date.now();
+      applyVersion(v);
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(v)); } catch (e) {}
+    })
+    .catch(function () {
+      if (cached && cached.tag) applyVersion(cached);
+      else Array.prototype.forEach.call(versionTags, function (tag) { tag.textContent = "no version tagged"; });
+    });
+})();
+
+// Onyx Calc — Tokkul earned selling runes to TzHaar-Mej-Roh's Rune Store.
+(function () {
+  var RUNES = [
+    { key: "chaos", name: "Chaos rune", value: 90  },
+    { key: "death", name: "Death rune", value: 180 }
+  ];
+  // 16,666 death runes is the fewest that earns 300,000 Tokkul (one uncut onyx) at the base,
+  // no-gloves rate — a default that shows the calculator mid-use rather than at zero.
+  var DEFAULT_QTY = { death: "16,666" };
+
+  var runeInputsEl = document.getElementById("runeInputs");
+  RUNES.forEach(function (r) {
+    var field = document.createElement("div");
+    field.className = "field";
+    field.innerHTML =
+      '<label for="in-rune-' + r.key + '">' + r.name + '</label>' +
+      '<div class="input-row"><input id="in-rune-' + r.key + '" type="text" inputmode="numeric" autocomplete="off" value="' +
+      (DEFAULT_QTY[r.key] || "0") + '"><span class="unit">sold</span></div>';
+    runeInputsEl.appendChild(field);
+    r.input = field.querySelector("input");
+  });
+
+  var glovesOn = false;
+  var glovesToggle = document.getElementById("glovesToggle");
+  var glovesHint = document.getElementById("glovesHint");
+
+  glovesToggle.addEventListener("click", function (e) {
+    var btn = e.target.closest(".mode-btn");
+    if (!btn) return;
+    glovesOn = btn.getAttribute("data-gloves") === "on";
+    Array.prototype.forEach.call(glovesToggle.querySelectorAll(".mode-btn"), function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+    glovesHint.textContent = glovesOn
+      ? "With gloves: runes sell to the shop starting at 35% of their value — a much better buy-back rate."
+      : "Base rate: runes sell to the shop starting at 15% of their value.";
+    computeOnyx();
+  });
+
+  var startingTokkulInp = document.getElementById("in-starting-tokkul");
+  startingTokkulInp.addEventListener("input", function () {
+    formatCommas(startingTokkulInp);
+    computeOnyx();
+  });
+
+  // TzHaar-Hur-Lek's Ore and Gem Store keeps only 1 uncut onyx in stock at a time (restocking
+  // once a minute), so there's never a chance to buy a second one before the price would move —
+  // every purchase lands at the same base "Sells at" price: 300,000 Tokkul normally, or
+  // 260,000 while wearing Karamja gloves (tier 1+).
+  var ONYX_PRICE_NO_GLOVES = 300000;
+  var ONYX_PRICE_GLOVES = 260000;
+
+  var FLOOR_PCT = 0.10;
+  var CHANGE_PCT = 0.02;
+
+  // OSRS shop prices move in a straight line, not a compounding curve: each rune sold drops
+  // the price by a further 2% of its base value, floored at the standard 10% of value every
+  // shop enforces once heavily overstocked. Returns the Tokkul earned selling qty of this rune
+  // in one sitting, assuming the shop starts at its default stock.
+  function runeSaleTotal(baseValue, qty, gloves) {
+    if (!(qty > 0)) return { total: 0, avg: 0, last: 0 };
+    var buyAtPct = gloves ? 0.35 : 0.15;
+    var floorPrice = baseValue * FLOOR_PCT;
+    // How many runes get priced by the linear formula before it bottoms out at the floor.
+    var nStar = (buyAtPct - FLOOR_PCT) / CHANGE_PCT;
+    var decayCount = Math.min(qty, Math.max(0, Math.ceil(nStar - 1e-9)));
+    var decayingSum = baseValue * decayCount * (buyAtPct - CHANGE_PCT * (decayCount - 1) / 2);
+    var flatCount = qty - decayCount;
+    var total = decayingSum + flatCount * floorPrice;
+    var lastPrice = flatCount > 0 ? floorPrice : baseValue * (buyAtPct - CHANGE_PCT * (decayCount - 1));
+    return { total: total, avg: total / qty, last: lastPrice };
+  }
+
+  function fmtTk(v) { return isFinite(v) ? Math.round(v).toLocaleString("en-US") + " tk" : "—"; }
+
+  function computeOnyx() {
+    var tbody = document.getElementById("onyxTableBody");
+    tbody.innerHTML = "";
+    var grandTotal = 0, grandWithGloves = 0, grandNoGloves = 0, grandCount = 0;
+
+    RUNES.forEach(function (r) {
+      var qtyRaw = parseInt(stripCommas(r.input.value), 10);
+      var qty = isFinite(qtyRaw) && qtyRaw > 0 ? Math.round(qtyRaw) : 0;
+      var sWithGloves = runeSaleTotal(r.value, qty, true);
+      var sNoGloves = runeSaleTotal(r.value, qty, false);
+      var s = glovesOn ? sWithGloves : sNoGloves;
+      grandTotal += s.total;
+      grandWithGloves += sWithGloves.total;
+      grandNoGloves += sNoGloves.total;
+      grandCount += qty;
+
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + r.name + "</td>" +
+        "<td class=\"tnum\">" + fmtInt(r.value) + "</td>" +
+        "<td class=\"tnum\">" + fmtInt(qty) + "</td>" +
+        "<td class=\"tnum\">" + fmtTk(s.total) + "</td>" +
+        "<td class=\"tnum\">" + fmtPrice(s.avg) + "</td>" +
+        "<td class=\"tnum\">" + fmtPrice(s.last) + "</td>";
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("onyxStatCount").textContent = fmtInt(grandCount);
+    document.getElementById("onyxStatTotal").textContent = fmtTk(grandTotal);
+    document.getElementById("onyxStatAvg").textContent = grandCount > 0 ? fmtPrice(grandTotal / grandCount) : "—";
+    document.getElementById("onyxStatGloves").textContent = "+" + fmtTk(grandWithGloves - grandNoGloves);
+
+    var startingRaw = numVal(startingTokkulInp);
+    var startingTokkul = isFinite(startingRaw) && startingRaw > 0 ? startingRaw : 0;
+    var grandTokkul = startingTokkul + grandTotal;
+    var onyxPrice = glovesOn ? ONYX_PRICE_GLOVES : ONYX_PRICE_NO_GLOVES;
+    // Shown to the nearest tenth (1.3, 1.5, 0.9, ...) rather than floored to a whole onyx, so
+    // it reads as "how close are you" rather than "how many can you walk away with right now".
+    var onyxCountTenths = grandTokkul / onyxPrice;
+    var wholeOnyx = Math.floor(onyxCountTenths);
+    var leftover = grandTokkul - wholeOnyx * onyxPrice;
+
+    document.getElementById("onyxStatGrandTotal").textContent = fmtTk(grandTokkul);
+    document.getElementById("onyxStatOnyxPrice").textContent = fmtTk(onyxPrice);
+    document.getElementById("onyxStatOnyxCount").textContent = isFinite(onyxCountTenths) ? onyxCountTenths.toFixed(1) : "—";
+    document.getElementById("onyxStatLeftover").textContent = fmtTk(leftover);
+  }
+
+  RUNES.forEach(function (r) {
+    r.input.addEventListener("input", function () {
+      formatCommas(r.input);
+      computeOnyx();
+    });
+  });
+
+  computeOnyx();
+})();
+
+// Top-level tab switcher — swaps between the General Calc and Onyx Calc sections and flips
+// the page into (or out of) the TzHaar lava theme via the [data-page] attribute on <html>.
+(function () {
+  var pageTabs = document.getElementById("pageTabs");
+  var sections = {
+    general: document.getElementById("section-general"),
+    onyx: document.getElementById("section-onyx")
+  };
+
+  pageTabs.addEventListener("click", function (e) {
+    var btn = e.target.closest(".mode-btn");
+    if (!btn) return;
+    var page = btn.getAttribute("data-page");
+
+    Array.prototype.forEach.call(pageTabs.querySelectorAll(".mode-btn"), function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+    Object.keys(sections).forEach(function (key) {
+      sections[key].hidden = key !== page;
+    });
+    document.documentElement.setAttribute("data-page", page);
+
+    if (page === "general" && window.recomputeGeneral) window.recomputeGeneral();
+  });
 })();
 </script>
 </body>
