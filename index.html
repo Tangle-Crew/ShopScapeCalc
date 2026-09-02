@@ -318,6 +318,11 @@
         <div class="input-row"><input id="in-count" type="text" inputmode="numeric" autocomplete="off" value="25,000"><span class="unit" id="countUnit">units</span></div>
         <div class="err-msg" id="countErr">Must be a whole number ≥ 1</div>
       </div>
+      <div class="field" id="f-stock">
+        <label for="in-stock">Max stock (optional)</label>
+        <div class="input-row"><input id="in-stock" type="text" inputmode="numeric" autocomplete="off" value="" placeholder="unlimited"><span class="unit">units</span></div>
+        <div class="err-msg">Must be a whole number ≥ 1, or left blank for unlimited</div>
+      </div>
     </div>
 
     <button class="adv-toggle" id="advToggle" type="button">
@@ -567,6 +572,7 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
   var priceInp = document.getElementById("in-price");
   var decayInp = document.getElementById("in-decay");
   var countInp = document.getElementById("in-count");
+  var stockInp = document.getElementById("in-stock");
   var stepInp  = document.getElementById("in-step");
   var rowsInp  = document.getElementById("in-rows");
 
@@ -751,16 +757,24 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
     var price = numVal(priceInp);
     var ratePct = numVal(decayInp);
     var inputVal = numVal(countInp);
+    var stockRaw = stripCommas(stockInp.value).trim();
+    var stockNum = stockRaw === "" ? null : parseFloat(stockRaw);
     var step = numVal(stepInp);
     var rows = parseInt(stripCommas(rowsInp.value), 10);
 
     var okPrice = fieldOk(priceInp, isFinite(price) && price > 0);
     var okDecay = fieldOk(decayInp, isFinite(ratePct) && ratePct >= 0 && ratePct < 100);
     var okCount = fieldOk(countInp, isFinite(inputVal) && inputVal >= 1);
+    var okStock = fieldOk(stockInp, stockNum === null || (isFinite(stockNum) && stockNum >= 1));
     var okStep  = fieldOk(stepInp, isFinite(step) && step >= 1);
     var okRows  = fieldOk(rowsInp, isFinite(rows) && rows >= 1 && rows <= 100);
 
-    if (!(okPrice && okDecay && okCount && okStep && okRows)) return;
+    if (!(okPrice && okDecay && okCount && okStock && okStep && okRows)) return;
+
+    // A store's max stock caps how many items can move in a single world before you have to
+    // hop — the same physical ceiling as an amount-goal's item count, just from the shop's side
+    // instead of the player's. Left blank, there's no cap (unchanged from before this field existed).
+    var stockCap = stockNum === null ? Infinity : Math.round(stockNum);
 
     inputVal = Math.round(inputVal);
     step = Math.round(step);
@@ -794,13 +808,17 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
     // idealVal = the value at batch = 1 (price never moves): a gold ceiling/floor for an
     // amount-goal, or an items ceiling/floor for a gold-goal.
     var idealVal = goal === "amount" ? price * itemsFixed : goldFixed / price;
+    // batchCap is the largest batch size actually reachable in one world: an amount-goal is
+    // already capped at its own item count, and a max stock (if set) caps either goal further.
+    var batchCap = Math.min(goal === "amount" ? itemsFixed : Infinity, stockCap);
     // sweepScale bounds how far the batch-size sweep runs. For an amount-goal it's the item
     // count itself (can't sell/buy more than you have per world). For a gold-goal there's no
-    // natural cap, so use a generous multiple of the ideal item count instead.
-    var sweepScale = goal === "amount" ? itemsFixed : Math.max(Math.round(idealVal * 20), step * rows, 1);
+    // natural cap, so use a generous multiple of the ideal item count instead — either way,
+    // batchCap can only shrink it further.
+    var sweepScale = Math.min(goal === "amount" ? itemsFixed : Math.max(Math.round(idealVal * 20), step * rows, 1), batchCap);
 
     function statsForBatch(b) {
-      if (goal === "amount") b = Math.min(b, itemsFixed);
+      b = Math.min(b, batchCap);
       var Wb = valueForBatch(b);
       var hops, val, avgPrice, lastPrice;
       if (goal === "amount") {
@@ -892,7 +910,7 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
 
     renderSummary(statsForBatch(recBatch));
     renderChart(curvePts, recBatch, idealVal);
-    renderTable(step, rows, goal === "amount" ? itemsFixed : Infinity, recBatch, statsForBatch);
+    renderTable(step, rows, batchCap, recBatch, statsForBatch);
   }
 
   function renderEmpty() {
@@ -1108,7 +1126,7 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
     }
   }
 
-  [priceInp, decayInp, countInp, stepInp, rowsInp].forEach(function (inp) {
+  [priceInp, decayInp, countInp, stockInp, stepInp, rowsInp].forEach(function (inp) {
     inp.addEventListener("input", function () {
       formatCommas(inp);
       compute();
