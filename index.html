@@ -288,6 +288,15 @@
   @media (max-width: 520px) {
     .mode-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   }
+  @media (max-width: 480px) {
+    /* .page-tabs .mode-btn's own padding/font-size otherwise outrank the max-width:640
+       .mode-btn rule above by selector specificity, so the top-level tab bar never actually
+       shrank on phones — its three full-size tabs need ~295px, which overflows anything
+       under ~320px wide (e.g. a folding phone's cover screen) and forces page-wide horizontal
+       scroll. Shrink it directly, with wrapping as a fallback for anything still narrower. */
+    .page-tabs { flex-wrap: wrap; justify-content: center; }
+    .page-tabs .mode-btn { padding: 8px 14px; font-size: 12.5px; }
+  }
 </style>
 </head>
 <body>
