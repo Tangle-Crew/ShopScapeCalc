@@ -1269,10 +1269,10 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
   window.recomputeGeneral = compute;
 })();
 
-// Shows the latest release tag, pulled straight from GitHub rather than baked in at deploy
+// Shows the newest version tag, pulled straight from GitHub rather than baked in at deploy
 // time — this file has no build step, so there's no other point a version number would get
-// stamped in. Both tabs have their own version-tag anchor, so every ".version-tag" element
-// gets the same label.
+// stamped in. All three tabs have their own version-tag anchor, so every ".version-tag"
+// element gets the same label.
 (function () {
   var versionTags = document.querySelectorAll(".version-tag");
   if (!versionTags.length) return;
@@ -1303,31 +1303,35 @@ function fmtPrice(v) { return isFinite(v) ? v.toLocaleString("en-US", { minimumF
     return;
   }
 
-  // Prefer a published GitHub Release (has a reliable "latest" and a publish date); fall
-  // back to the newest plain git tag if the repo doesn't use Releases.
-  fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
-    .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("bad status"); return r.json(); })
-    .then(function (release) {
-      if (release && release.tag_name) {
-        return {
-          tag: release.tag_name,
-          date: release.published_at || null,
-          url: release.html_url,
-          msg: release.name || ""
-        };
-      }
-      return fetch("https://api.github.com/repos/" + REPO + "/tags")
-        .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
-        .then(function (tags) {
-          if (!tags || !tags.length) throw new Error("no tags");
-          var t = tags[0];
-          return {
-            tag: t.name,
-            date: null,
-            url: "https://github.com/" + REPO + "/releases/tag/" + encodeURIComponent(t.name),
-            msg: ""
-          };
-        });
+  // Read every tag and pick whichever parses as the highest semver — not "whatever GitHub's
+  // /releases/latest happens to point at" (that only updates when someone manually publishes a
+  // Release, which this repo doesn't do for every version) and not "tags[0]" (the tags API's
+  // return order isn't documented to be sorted, so trusting it silently breaks the moment it
+  // isn't). A tag that doesn't look like vMAJOR.MINOR.PATCH is ignored rather than guessed at.
+  function parseSemver(name) {
+    var m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(name);
+    return m ? [parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10)] : null;
+  }
+  function isNewer(a, b) {
+    return a[0] !== b[0] ? a[0] > b[0] : a[1] !== b[1] ? a[1] > b[1] : a[2] > b[2];
+  }
+
+  fetch("https://api.github.com/repos/" + REPO + "/tags")
+    .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
+    .then(function (tags) {
+      if (!tags || !tags.length) throw new Error("no tags");
+      var best = null, bestVer = null;
+      tags.forEach(function (t) {
+        var ver = parseSemver(t.name);
+        if (ver && (!bestVer || isNewer(ver, bestVer))) { best = t; bestVer = ver; }
+      });
+      if (!best) best = tags[0]; // nothing parsed as semver — fall back to whatever came back
+      return {
+        tag: best.name,
+        date: null,
+        url: "https://github.com/" + REPO + "/releases/tag/" + encodeURIComponent(best.name),
+        msg: ""
+      };
     })
     .then(function (v) {
       if (!v || !v.tag) throw new Error("no tag");
